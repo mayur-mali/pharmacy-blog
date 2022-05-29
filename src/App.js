@@ -5,6 +5,7 @@ import Blogs from "./pages/Blogs";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import SingleBlog from "./pages/SingleBlog";
 
 function App() {
   //const currentUser = false;
