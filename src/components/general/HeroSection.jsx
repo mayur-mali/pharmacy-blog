@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useContext } from "react";
 import useTitle from "../../customhooks/useTitle";
 import heroimg from "../../static/assets/svg/flame-787.png";
+import { useNavigate } from "react-router-dom";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+import { auth } from "../../firebase";
+import { AuthContext } from "../../context/AuthContext";
+
 export default function HeroSection() {
+  const { dispatch } = useContext(AuthContext);
+  const provider = new GoogleAuthProvider();
   useTitle("welcome to pharmacy blog");
-  const handleSubmit = () => {
-    console.log("click");
+  const nevigate = useNavigate();
+  const hadleGoogleSignIn = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        dispatch({ type: "LOGIN", payload: user });
+        localStorage.setItem("isLogin", true);
+        nevigate("/blogs");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
-    <div className="h-full bg-slate-100 flex justify-center flex-col items-center">
+    <div className="h-full  flex justify-center flex-col items-center">
       <img src={heroimg} alt="hero" className="" />
       <main className="mx-auto max-w-7xl px-4 ">
         <div className="text-center">
@@ -28,7 +46,7 @@ export default function HeroSection() {
           <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
             <div className="rounded-md shadow">
               <button
-                onClick={() => handleSubmit()}
+                onClick={() => hadleGoogleSignIn()}
                 className="w-full flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-black transition-all duration-200 hover:bg-indigo-700 md:py-3 capitalize md:text-lg md:px-10"
               >
                 sing in with google..

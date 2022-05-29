@@ -2,12 +2,20 @@ import "./App.css";
 import Navbar from "./components/general/Navbar";
 import HeroSection from "./components/general/HeroSection";
 import Blogs from "./pages/Blogs";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
+  //const currentUser = false;
+  const { currentUser } = useContext(AuthContext);
+  const RequireAuth = ({ children }) => {
+    return currentUser ? children : <Navigate to="/" />;
+  };
+
   const Layout1 = ({ children }) => {
     return (
-      <div className="w-full bg-gray-100 pt-24 text-white">
+      <div className="w-full pt-24 text-white">
         <div>
           <Navbar />
         </div>
@@ -15,11 +23,7 @@ function App() {
       </div>
     );
   };
-  const Layout2 = ({ children }) => {
-    return (
-      <div className="h-screen w-full  bg-gray-100 text-white">{children}</div>
-    );
-  };
+
   return (
     <div className="App h-screen">
       <Routes>
@@ -35,7 +39,9 @@ function App() {
           path="/blogs"
           element={
             <Layout1>
-              <Blogs />
+              <RequireAuth>
+                <Blogs />
+              </RequireAuth>
             </Layout1>
           }
         />
