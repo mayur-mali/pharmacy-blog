@@ -1,6 +1,8 @@
 import React from "react";
+import useTitle from "../../customhooks/useTitle";
 import heroimg from "../../static/assets/svg/flame-787.png";
-function HeroSection() {
+export default function HeroSection() {
+  useTitle("welcome to pharmacy blog");
   const handleSubmit = () => {
     console.log("click");
   };
@@ -38,5 +40,3 @@ function HeroSection() {
     </div>
   );
 }
-
-export default HeroSection;
