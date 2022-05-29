@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
 import useTitle from "../../customhooks/useTitle";
 import heroimg from "../../static/assets/svg/flame-787.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import { auth } from "../../firebase";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function HeroSection() {
-  const { dispatch } = useContext(AuthContext);
+  const { dispatch, currentUser } = useContext(AuthContext);
   const provider = new GoogleAuthProvider();
   useTitle("welcome to pharmacy blog");
   const nevigate = useNavigate();
@@ -43,16 +43,30 @@ export default function HeroSection() {
             lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
             fugiat aliqua.
           </p>
-          <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-            <div className="rounded-md shadow">
-              <button
-                onClick={() => hadleGoogleSignIn()}
-                className="w-full flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-black transition-all duration-200 hover:bg-indigo-700 md:py-3 capitalize md:text-lg md:px-10"
-              >
-                sing in with google..
-              </button>
+          {currentUser ? (
+            <div className="mt-4">
+              <h1 className="text-black sm:text-lg md:text-5xl font-bold">
+                <span className="text-indigo-600 mr-2">Welcome !</span>
+                {currentUser.displayName}
+              </h1>
+              <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+                <Link to="/blogs" className="bg-black px-4 py-2 rounded-xl">
+                  Go to blogs
+                </Link>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+              <div className="rounded-md shadow">
+                <button
+                  onClick={() => hadleGoogleSignIn()}
+                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-black transition-all duration-200 hover:bg-indigo-700 md:py-3 capitalize md:text-lg md:px-10"
+                >
+                  sing in with google..
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
